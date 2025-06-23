@@ -3,11 +3,15 @@ import java.util.ArrayList;
 public class Node{
     private char name;
     private ArrayList<Node> edgeNodes;
+    private ArrayList<Integer> edgeCosts; // for edgecosts and heuristics, they match indexes with the edgenodes
+    private ArrayList<Integer> heuristics;
     public boolean isVisited;
 
     public Node(char name){
         this.name = name;
         this.edgeNodes = new ArrayList<Node>();
+        this.edgeCosts = new ArrayList<Integer>();
+        this.heuristics= new ArrayList<Integer>();
     }
 
     public char getName(){
@@ -31,6 +35,16 @@ public class Node{
             System.out.println(E);
             return false;
         }
+    }
+
+    public int getHeuristicOfEdge(char edgeName){
+        for (int i = 0; i < this.getEdgeCount(); i++){
+            if (this.edgeNodes.get(i).getName() == edgeName){
+                return this.heuristics.get(i);
+            }
+        }
+
+        return -1;
     }
 
 }
