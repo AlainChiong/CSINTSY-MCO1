@@ -2,11 +2,11 @@ import java.util.*;
 
 public class Main{
 
-
     public static void BFS(){
         // This gonna be for bfs, input parameters still not final
         // Queue<Integer> q = new LinkedList<>();
     }
+    
     public static void main(String args[]){
         int[] arr = new int[50];
 
