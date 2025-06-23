@@ -39,7 +39,7 @@ public class Node{
 
     public int getHeuristicOfEdge(String edgeName){
         for (int i = 0; i < this.getEdgeCount(); i++){
-            if (this.edgeNodes.get(i).getName() == edgeName){
+            if (this.edgeNodes.get(i).getName().equals(edgeName)){
                 return this.heuristics.get(i);
             }
         }

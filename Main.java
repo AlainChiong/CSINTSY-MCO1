@@ -23,6 +23,7 @@ public class Main{
         switch(input){
             case 1:
                 BFS(start, goal, nodeList);
+                
                 break;
             case 2:
                 A_Star(start, goal, nodeList);
