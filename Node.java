@@ -12,6 +12,7 @@ public class Node{
         this.edgeNodes = new ArrayList<Node>();
         this.edgeCosts = new ArrayList<Integer>();
         this.heuristics= new ArrayList<Integer>();
+        this.isVisited = false;
     }
 
     public String getName(){
@@ -26,9 +27,11 @@ public class Node{
         return this.edgeNodes;
     }
 
-    public boolean addEdge(Node newEdge){
+    public boolean addEdge(Node newEdge, int edgeCost, int edgeHeuristic){
         try{
             this.edgeNodes.add(newEdge);
+            this.edgeCosts.add(edgeCost);
+            this.heuristics.add(edgeHeuristic);
             return true;
         }
         catch(Exception E){
@@ -39,7 +42,7 @@ public class Node{
 
     public int getHeuristicOfEdge(String edgeName){
         for (int i = 0; i < this.getEdgeCount(); i++){
-            if (this.edgeNodes.get(i).getName() == edgeName){
+            if (this.edgeNodes.get(i).getName().equals(edgeName)){
                 return this.heuristics.get(i);
             }
         }
