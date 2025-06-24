@@ -106,7 +106,7 @@ public class Main{
         }
 
         System.out.println(nNode);
-        boolean isok = nodeList[0].addEdge(nodeList[1]); // check if adding edge is successful
+        boolean isok = nodeList[0].addEdge(nodeList[1], 1, 1); // check if adding edge is successful
         
         System.out.println(isok);
         System.out.println(nodeList[0].getEdgeCount());
