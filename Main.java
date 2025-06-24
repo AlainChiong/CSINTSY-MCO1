@@ -34,16 +34,19 @@ public class Main{
     
     public static void main(String args[]){
         int[] arr = new int[50];
-        Scanner sc = new Scanner(System.in);
+
         for (int i = 0; i < 50; i++){
             arr[i] = i + 1;
         }
         
         Node[] nodeList = new Node[100];
+
         int nNode;// incase we need to add a new node
+
         for (nNode = 0; nNode < 21; nNode++){
             nodeList[nNode] = new Node(String.valueOf((char)('A' + nNode)));
         }
+
         System.out.println(nNode);
         boolean isok = nodeList[0].addEdge(nodeList[1]); // check if adding edge is successful
         
@@ -52,15 +55,21 @@ public class Main{
 
         //interface
         boolean running = true;
+        
+        Scanner sc = new Scanner(System.in);
+
         while(running){
             System.out.println("\nAvailable locations");
+
             for (int i = 0; i < nNode; i++){
                 System.out.print(nodeList[i].getName());
                 if(i != nNode - 1){
                     System.out.print(", ");
                 }
             }
+
             System.out.println("\n1. Input start and goal\n2. Input new node\n3. Exit");
+
             int choice = sc.nextInt();
             sc.nextLine();
 
@@ -76,14 +85,16 @@ public class Main{
                     // edge part here
                     break;
                 case 3:
-                    System.out.print("Goodbye");
+                    System.out.print("Goodbye.");
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid option");
+                    System.out.println("Invalid option.");
                     break;
             }
+
         }
+
         sc.close();
     }
 }
