@@ -102,7 +102,7 @@ public class Main{
 
         int nNode;// incase we need to add a new node
 
-        for (nNode = 0; nNode < 21; nNode++){
+        for (nNode = 0; nNode < 22; nNode++){
             nodeList[nNode] = new Node(String.valueOf((char)('A' + nNode)));
         }
 
