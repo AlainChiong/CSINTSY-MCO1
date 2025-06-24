@@ -3,8 +3,66 @@ import java.util.*;
 public class Main{
 
     public static void BFS(String start, String goal, Node[] nodeList){
-        // This gonna be for bfs, input parameters still not final
-        // Queue<Integer> q = new LinkedList<>();
+        Node startNode = null;
+        Node goalNode = null;
+
+        
+        for (Node node : nodeList){
+            if (node != null){
+                node.isVisited = false;
+
+                if (node.getName().equals(start)) {
+                    startNode = node;
+                }
+                if (node.getName().equals(goal)) {
+                    goalNode = node;
+                }
+            }
+        }
+
+        if (startNode == null || goalNode == null){
+            System.out.println("Start or goal node not found.");
+            return;
+        }
+
+        Queue<Node> queue = new LinkedList<>();
+        HashMap<String, String> parentMap = new HashMap<>(); 
+
+        queue.add(startNode);
+        startNode.isVisited = true;
+
+        boolean found = false;
+
+        while (!queue.isEmpty()){
+            Node current = queue.poll();
+            System.out.println("Visiting: " + current.getName());
+
+            if (current == goalNode){
+                found = true;
+                break;
+            }
+
+            for (Node neighbor : current.getEdgeNodes()){
+                if (!neighbor.isVisited){
+                    neighbor.isVisited = true;
+                    queue.add(neighbor);
+                    parentMap.put(neighbor.getName(), current.getName());
+                }
+            }
+        }
+
+        if (found){
+            LinkedList<String> path = new LinkedList<>();
+            String step = goal;
+            while (step != null){
+                path.addFirst(step);
+                step = parentMap.get(step);
+            }
+
+            System.out.println("BFS Path: " + String.join(" -> ", path));
+        } else {
+            System.out.println("No path found.");
+        }
     }
 
     public static void A_Star(String start, String goal, Node[] nodeList){
