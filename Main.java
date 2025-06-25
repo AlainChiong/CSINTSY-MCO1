@@ -213,9 +213,16 @@ public class Main {
         gMap.put(start, 0);
         open.add(start);
 
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        long beforeUsedMem = runtime.totalMemory() - runtime.freeMemory();
+
+        long startTime = System.nanoTime();
         while (!open.isEmpty()) {
             Node cur = open.poll();
             
+            System.out.println("Visiting: " + cur.getName());
+
             if (cur == goal) 
                 break;
             
@@ -234,6 +241,14 @@ public class Main {
             }
         }
 
+        long endTime = System.nanoTime();
+
+        runtime.gc(); // Optional GC after A*
+        long afterUsedMem = runtime.totalMemory() - runtime.freeMemory();
+        long actualMemUsed = afterUsedMem - beforeUsedMem;
+
+        long duration = (endTime - startTime) / 1000; // Convert to microseconds
+
         List<Node> path = new ArrayList<>();
 
         for (Node at = goal; at != null; at = parent.get(at)) {
@@ -243,7 +258,8 @@ public class Main {
         Collections.reverse(path);
 
         int totalG = gMap.getOrDefault(goal, Integer.MAX_VALUE);
-
+        System.out.println("Memory used: " + actualMemUsed + " bytes");
+        System.out.println("Time taken: " + duration + " microseconds");
         System.out.print("Optimal Path: ");
 
         for (int i = 0; i < path.size(); i++) {
