@@ -45,67 +45,95 @@ public class Main {
         }
     }
 
-    public static void BFS(String start, String goal, Node[] nodeList){
-        Node startNode = null;
-        Node goalNode = null;
+    public static void BFS(String start, String goal, Node[] nodeList) {
+    Node startNode = null;
+    Node goalNode = null;
 
-        for (Node node : nodeList){
-            if (node != null){
-                node.isVisited = false;
+    
+    for (Node node : nodeList) {
+        if (node != null) {
+            node.isVisited = false;
 
-                if (node.getName().equals(start)) {
-                    startNode = node;
-                }
-                if (node.getName().equals(goal)) {
-                    goalNode = node;
-                }
+            if (node.getName().equals(start)) {
+                startNode = node;
             }
-        }
-
-        if (startNode == null || goalNode == null){
-            System.out.println("Start or goal node not found.");
-            return;
-        }
-
-        Queue<Node> queue = new LinkedList<>();
-        HashMap<String, String> parentMap = new HashMap<>(); 
-
-        queue.add(startNode);
-        startNode.isVisited = true;
-
-        boolean found = false;
-
-        while (!queue.isEmpty()){
-            Node current = queue.poll();
-            System.out.println("Visiting: " + current.getName());
-
-            if (current.getName().equals(goalNode.getName())){
-                found = true;
-                break;
+            if (node.getName().equals(goal)) {
+                goalNode = node;
             }
-
-            for (Node neighbor : current.getEdgeNodes()){
-                if (!neighbor.isVisited){
-                    neighbor.isVisited = true;
-                    queue.add(neighbor);
-                    parentMap.put(neighbor.getName(), current.getName());
-                }
-            }
-        }
-
-        if (found){
-            LinkedList<String> path = new LinkedList<>();
-            String step = goal;
-            while (step != null){
-                path.addFirst(step);
-                step = parentMap.get(step);
-            }
-
-            System.out.println("BFS Path: " + String.join(" -> ", path));
-        } else {
-            System.out.println("No path found.");
         }
     }
+
+    
+    if (startNode == null || goalNode == null) {
+        System.out.println("Start or goal node not found.");
+        return;
+    }
+
+    
+    Runtime runtime = Runtime.getRuntime();
+    runtime.gc(); 
+    long memoryBefore = runtime.totalMemory() - runtime.freeMemory();
+
+    
+    long startTime = System.currentTimeMillis();
+
+    
+    Queue<Node> queue = new LinkedList<>();
+    HashMap<String, String> parentMap = new HashMap<>();
+    int nodesVisited = 0;
+
+    queue.add(startNode);
+    startNode.isVisited = true;
+
+    boolean found = false;
+
+    
+    while (!queue.isEmpty()) {
+        Node current = queue.poll();
+        nodesVisited++; // ✅ Count this node
+        System.out.println("Visiting: " + current.getName());
+
+        if (current.getName().equals(goalNode.getName())) {
+            found = true;
+            break;
+        }
+
+        for (Node neighbor : current.getEdgeNodes()) {
+            if (!neighbor.isVisited) {
+                neighbor.isVisited = true;
+                queue.add(neighbor);
+                parentMap.put(neighbor.getName(), current.getName());
+            }
+        }
+    }
+
+    
+    long endTime = System.currentTimeMillis();
+    long duration = endTime - startTime;
+
+    
+    long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
+    long memoryUsed = memoryAfter - memoryBefore;
+
+    
+    if (found) {
+        LinkedList<String> path = new LinkedList<>();
+        String step = goal;
+        while (step != null) {
+            path.addFirst(step);
+            step = parentMap.get(step);
+        }
+
+        System.out.println("BFS Path: " + String.join(" -> ", path));
+    } else {
+        System.out.println("No path found.");
+    }
+
+    
+    System.out.println("Time taken: " + duration + " ms");
+    System.out.println("Nodes visited: " + nodesVisited);
+    System.out.println("Approx. memory used: " + memoryUsed / 1024 + " KB");
+}
 
     public static void Search(Scanner sc, Node[] nodeList){
         System.out.print("Enter start node:");
