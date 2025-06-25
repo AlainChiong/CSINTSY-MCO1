@@ -49,7 +49,6 @@ public class Main {
         Node startNode = null;
         Node goalNode = null;
 
-    
         for (Node node : nodeList){
             if (node != null){
                 node.isVisited = false;
@@ -80,7 +79,7 @@ public class Main {
             Node current = queue.poll();
             System.out.println("Visiting: " + current.getName());
 
-            if (current == goalNode){
+            if (current.getName().equals(goalNode.getName())){
                 found = true;
                 break;
             }
@@ -138,10 +137,11 @@ public class Main {
                 "A,B,1","A,T,3","B,C,2","B,T,3","C,D,8","C,R,3",
                 "D,E,3","E,F,1","E,O,3","F,G,3","F,O,3","G,H,4",
                 "G,I,2","H,L,2","I,J,1","I,L,4","I,N,3","J,K,1",
-                "J,M,4","J,N,3","J,V,4","K,U,1","L,V,1","M,N,1",
-                "N,O,6","O,P,4","O,S,5","P,Q,1","P,S,1",
-                "Q,R,2","Q,S,2", "U,V,2"
+                "J,M,4","J,N,3","J,V,4","K,U,1","K,M,3","L,V,1",
+                "M,N,1","N,O,6","O,P,4","O,S,5","P,Q,1","P,S,1",
+                "Q,R,2","Q,S,2","R,T,4","U,V,2"
             };
+
             for (String entry : data) {
                 String[] parts = entry.split(",");
                 String a = parts[0], b = parts[1];
@@ -150,12 +150,15 @@ public class Main {
                 MAP.computeIfAbsent(b, k -> new HashMap<>()).put(a, cost);
             }
         }
+
         public static int cost(String from, String to) {
             return MAP.getOrDefault(from, Collections.emptyMap()).getOrDefault(to, Integer.MAX_VALUE);
         }
+
         public static boolean isConnected(String from, String to) {
             return MAP.containsKey(from) && MAP.get(from).containsKey(to);
         }
+
         public static Map<String, Integer> getedgeNodes(String node) {
             return MAP.getOrDefault(node, Collections.emptyMap());
         }
@@ -163,11 +166,17 @@ public class Main {
 
     public static void A_Star(String startName, String goalName, Node[] nodeList) {
         Node start = null, goal = null;
-        for (Node n : nodeList) if (n!=null) {
-            if (n.getName().equals(startName)) start=n;
-            if (n.getName().equals(goalName))  goal =n;
+        for (Node n : nodeList) if (n != null) {
+            if (n.getName().equals(startName)) 
+                start = n;
+            if (n.getName().equals(goalName))
+                goal = n;
         }
-        if (start==null||goal==null) { System.out.println("Start/goal not found."); return; }
+
+        if (start == null || goal == null) { 
+            System.out.println("Start/goal not found."); 
+            return; 
+        }
 
         Map<Node,Integer> gMap = new HashMap<>();
         Map<Node,Node> parent = new HashMap<>();
@@ -178,8 +187,12 @@ public class Main {
 
         while (!open.isEmpty()) {
             Node cur = open.poll();
-            if (cur == goal) break;
+            
+            if (cur == goal) 
+                break;
+            
             int curG = gMap.get(cur);
+            
             for (int i = 0; i < cur.getEdgeNodes().size(); i++) {
                 Node nb = cur.getEdgeNodes().get(i);
                 int cost = cur.getEdgeCosts().get(i);
@@ -194,18 +207,22 @@ public class Main {
         }
 
         List<Node> path = new ArrayList<>();
+
         for (Node at = goal; at != null; at = parent.get(at)) {
             path.add(at);
         }
+
         Collections.reverse(path);
 
         int totalG = gMap.getOrDefault(goal, Integer.MAX_VALUE);
 
         System.out.print("Optimal Path: ");
+
         for (int i = 0; i < path.size(); i++) {
             System.out.print(path.get(i).getName());
             if (i < path.size() - 1) System.out.print(" -> ");
         }
+
         System.out.println("\nTotal path cost: " + totalG);
     }
 
