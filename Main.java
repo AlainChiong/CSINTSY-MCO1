@@ -45,6 +45,92 @@ public class Main {
         }
     }
 
+    public static void BFS(String start, String goal, Node[] nodeList){
+        Node startNode = null;
+        Node goalNode = null;
+
+    
+        for (Node node : nodeList){
+            if (node != null){
+                node.isVisited = false;
+
+                if (node.getName().equals(start)) {
+                    startNode = node;
+                }
+                if (node.getName().equals(goal)) {
+                    goalNode = node;
+                }
+            }
+        }
+
+        if (startNode == null || goalNode == null){
+            System.out.println("Start or goal node not found.");
+            return;
+        }
+
+        Queue<Node> queue = new LinkedList<>();
+        HashMap<String, String> parentMap = new HashMap<>(); 
+
+        queue.add(startNode);
+        startNode.isVisited = true;
+
+        boolean found = false;
+
+        while (!queue.isEmpty()){
+            Node current = queue.poll();
+            System.out.println("Visiting: " + current.getName());
+
+            if (current == goalNode){
+                found = true;
+                break;
+            }
+
+            for (Node neighbor : current.getEdgeNodes()){
+                if (!neighbor.isVisited){
+                    neighbor.isVisited = true;
+                    queue.add(neighbor);
+                    parentMap.put(neighbor.getName(), current.getName());
+                }
+            }
+        }
+
+        if (found){
+            LinkedList<String> path = new LinkedList<>();
+            String step = goal;
+            while (step != null){
+                path.addFirst(step);
+                step = parentMap.get(step);
+            }
+
+            System.out.println("BFS Path: " + String.join(" -> ", path));
+        } else {
+            System.out.println("No path found.");
+        }
+    }
+
+    public static void Search(Scanner sc, Node[] nodeList){
+        System.out.print("Enter start node:");
+        String start = sc.next();
+        sc.nextLine();
+        System.out.print("Enter goal node:");
+        String goal = sc.next();
+        sc.nextLine();
+        System.out.println("1. BFS (Blind Search)\n2. A* (Heuristic Search)");
+        int input = sc.nextInt();
+
+        switch(input){
+            case 1:
+                BFS(start, goal, nodeList);
+                
+                break;
+            case 2:
+                A_Star(start, goal, nodeList);
+                break;
+            default:
+                break;
+        }
+    }
+
     public static class EdgeCostTable {
         private static final Map<String, Map<String, Integer>> MAP = new HashMap<>();
         static {
@@ -124,22 +210,6 @@ public class Main {
     }
 
 
-    public static void Search(Scanner sc, Node[] nodeList) {
-        System.out.println("\nAvailable locations: " + String.join(", ", HeuristicTable.NAMES));
-        System.out.print("1. A* Search\n2. Exit\nChoose: ");
-        int choice = sc.nextInt(); sc.nextLine();
-        if (choice == 1) {
-            System.out.print("Enter start: "); String s = sc.nextLine().trim();
-            System.out.print("Enter goal:  "); String g = sc.nextLine().trim();
-            A_Star(s, g, nodeList);
-        } else if (choice == 2) {
-            System.out.println("Exiting.");
-            System.exit(0);
-        } else {
-            System.out.println("Invalid option.");
-        }
-    }
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Node[] nodes = new Node[HeuristicTable.NAMES.length];
@@ -158,6 +228,7 @@ public class Main {
         // Menu loop
         while (true) {
             Search(sc, nodes);
+            sc.nextLine();
         }
     }
 }

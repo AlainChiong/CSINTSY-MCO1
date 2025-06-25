@@ -25,30 +25,21 @@ public class Node {
         return this.edgeNodes;
     }
 
+    public boolean addEdge(Node newEdge, int edgeCost){
+        try{
+            this.edgeNodes.add(newEdge);
+            this.edgeCosts.add(edgeCost);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
     public ArrayList<Integer> getEdgeCosts() {
         return this.edgeCosts;
     }
 
-    public boolean addEdge(Node newEdge) {
-        try {
-            this.edgeNodes.add(newEdge);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e);
-            return false;
-        }
-    }
-
-    public boolean addEdge(Node newEdge, int cost) {
-        try {
-            this.edgeNodes.add(newEdge);
-            this.edgeCosts.add(cost);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e);
-            return false;
-        }
-    }
 
     public int getEdgeCostTo(Node target) {
         for (int i = 0; i < edgeNodes.size(); i++) {
